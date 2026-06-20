@@ -65,21 +65,6 @@ public class CompraAdapter extends RecyclerView.Adapter<CompraAdapter.CompraView
             // Se puede establecer un placeholder aquí si se desea
             holder.imageViewFactura.setImageDrawable(null);
         }
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), EditarCompraActivity.class);
-                intent.putExtra("idDocumento", compra.getIdDocumento());
-                intent.putExtra("descripcion", compra.getDescripcion());
-                if (compra.getTotal() != null) {
-                    intent.putExtra("total", compra.getTotal());
-                } else {
-                    intent.putExtra("total", 0.0);
-                }
-                v.getContext().startActivity(intent);
-            }
-        });
     }
 
     @Override
