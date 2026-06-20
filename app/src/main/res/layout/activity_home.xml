@@ -20,6 +20,13 @@
         android:layout_weight="1" />
 
     <Button
+        android:id="@+id/btnRegistrarCompra"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Registrar Compra"
+        android:layout_marginTop="16dp" />
+
+    <Button
         android:id="@+id/btnLogout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
