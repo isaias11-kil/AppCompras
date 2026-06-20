@@ -1,36 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="24dp"
+    android:gravity="center_horizontal">
 
     <TextView
+        android:id="@+id/tvWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Catálogo de Productos"
-        android:textSize="24sp"
+        android:text="¡Bienvenido!"
+        android:textSize="28sp"
         android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="32dp" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        android:layout_marginBottom="40dp"
+        app:contentPadding="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Gastado"
+                android:textSize="18sp"
+                android:textColor="#757575" />
+
+            <TextView
+                android:id="@+id/tvTotalGastado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q0.00"
+                android:textSize="40sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_marginTop="8dp" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/btnRegistrarCompra"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Registrar Nueva Compra"
+        android:textSize="16sp"
         android:layout_marginBottom="16dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewProductos"
+    <Button
+        android:id="@+id/btnHistorialCompras"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Ver Historial de Compras"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Espaciador para empujar el botón de logout hacia abajo -->
+    <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
     <Button
-        android:id="@+id/btnRegistrarCompra"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Registrar Compra"
-        android:layout_marginTop="16dp" />
-
-    <Button
         android:id="@+id/btnLogout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:text="Cerrar Sesión"
-        android:layout_marginTop="16dp" />
+        android:textSize="16sp"
+        android:backgroundTint="#D32F2F"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="8dp" />
 
 </LinearLayout>
