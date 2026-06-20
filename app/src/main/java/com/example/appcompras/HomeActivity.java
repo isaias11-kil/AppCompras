@@ -23,6 +23,7 @@ public class HomeActivity extends AppCompatActivity {
     private ProductoAdapter productoAdapter;
     private List<Producto> productoList;
     private FirebaseFirestore db;
+    private Button btnRegistrarCompra;
     private Button btnLogout;
     private static final String TAG = "HomeActivity";
 
@@ -33,6 +34,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // Inicializar vistas
         recyclerViewProductos = findViewById(R.id.recyclerViewProductos);
+        btnRegistrarCompra = findViewById(R.id.btnRegistrarCompra);
         btnLogout = findViewById(R.id.btnLogout);
 
         // Configurar RecyclerView
@@ -46,6 +48,12 @@ public class HomeActivity extends AppCompatActivity {
 
         // Cargar datos
         cargarProductos();
+
+        // Configurar botón para registrar compra
+        btnRegistrarCompra.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, RegistrarCompraActivity.class);
+            startActivity(intent);
+        });
 
         // Configurar botón de logout
         btnLogout.setOnClickListener(v -> {
