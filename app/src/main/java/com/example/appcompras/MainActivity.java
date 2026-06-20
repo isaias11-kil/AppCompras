@@ -69,7 +69,10 @@ public class MainActivity extends AppCompatActivity {
                         FirebaseUser user = mAuth.getCurrentUser();
                         Toast.makeText(MainActivity.this, "Bienvenido: " + user.getEmail(), Toast.LENGTH_LONG).show();
 
-                        // NOTA: Aquí agregaremos el código para saltar a la siguiente pantalla después.
+                        // Ir a la HomeActivity
+                        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                        finish();
                     } else {
                         // Error (correo incorrecto, contraseña mal, o no existe)
                         Toast.makeText(MainActivity.this, "Error: Revisa tus credenciales", Toast.LENGTH_SHORT).show();
