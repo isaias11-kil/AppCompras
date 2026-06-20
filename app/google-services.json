@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "590598819232",
+    "project_id": "mi-app-compras-1f8f4",
+    "storage_bucket": "mi-app-compras-1f8f4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590598819232:android:d9d7a95f3e32001af668c5",
+        "android_client_info": {
+          "package_name": "com.example.appcompras"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDT-xbudxPt4FKIfVtfG7htTDOyHwYLPNM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
