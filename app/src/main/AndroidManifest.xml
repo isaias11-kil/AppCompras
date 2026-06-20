@@ -13,6 +13,9 @@
         android:theme="@style/Theme.AppCompras"
         tools:targetApi="31">
         <activity
+            android:name=".HistorialComprasActivity"
+            android:exported="false" />
+        <activity
             android:name=".RegistrarCompraActivity"
             android:exported="false" />
         <activity
