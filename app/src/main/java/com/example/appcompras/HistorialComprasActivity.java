@@ -3,11 +3,14 @@ package com.example.appcompras;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -39,7 +42,55 @@ public class HistorialComprasActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
+        configurarSwipeToDelete();
+
         cargarCompras();
+    }
+
+    private void configurarSwipeToDelete() {
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                Compra compraAEliminar = compraList.get(position);
+                eliminarCompra(compraAEliminar, position);
+            }
+        };
+        new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerViewCompras);
+    }
+
+    private void eliminarCompra(Compra compra, int position) {
+        String idDocumento = compra.getIdDocumento();
+        String imageUrl = compra.getImageUrl();
+
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl).delete()
+                    .addOnSuccessListener(aVoid -> eliminarDocumentoFirestore(idDocumento, position))
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Error al eliminar la imagen: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        compraAdapter.notifyItemChanged(position);
+                    });
+        } else {
+            eliminarDocumentoFirestore(idDocumento, position);
+        }
+    }
+
+    private void eliminarDocumentoFirestore(String idDocumento, int position) {
+        db.collection("compras").document(idDocumento).delete()
+                .addOnSuccessListener(aVoid -> {
+                    compraList.remove(position);
+                    compraAdapter.notifyItemRemoved(position);
+                    Toast.makeText(this, "Compra eliminada exitosamente", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Error al eliminar el documento: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    compraAdapter.notifyItemChanged(position);
+                });
     }
 
     private void cargarCompras() {
@@ -58,6 +109,7 @@ public class HistorialComprasActivity extends AppCompatActivity {
                     compraList.clear();
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Compra compra = document.toObject(Compra.class);
+                        compra.setIdDocumento(document.getId());
                         compraList.add(compra);
                     }
                     compraAdapter.notifyDataSetChanged();

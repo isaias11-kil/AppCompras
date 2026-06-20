@@ -1,8 +1,10 @@
 package com.example.appcompras;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.Exclude;
 
 public class Compra {
+    private String idDocumento;
     private String descripcion;
     private Double total;
     private Timestamp fecha;
@@ -59,5 +61,14 @@ public class Compra {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    @Exclude
+    public String getIdDocumento() {
+        return idDocumento;
+    }
+
+    public void setIdDocumento(String idDocumento) {
+        this.idDocumento = idDocumento;
     }
 }
