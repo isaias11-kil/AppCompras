@@ -3,6 +3,8 @@ package com.example.appcompras;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.content.Intent;
+import android.content.Context;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,6 +45,19 @@ public class ServidorAdapter extends RecyclerView.Adapter<ServidorAdapter.ViewHo
         holder.tvRecursos.setText(recursos);
 
         holder.tvArea.setText("Área: " + servidor.getArea());
+
+        holder.itemView.setOnClickListener(v -> {
+            Context context = v.getContext();
+            Intent intent = new Intent(context, EditarServidorActivity.class);
+            intent.putExtra("idDocumento", servidor.getIdDocumento());
+            intent.putExtra("tipoServidor", servidor.getTipoServidor());
+            intent.putExtra("procesador", servidor.getProcesador());
+            intent.putExtra("ram", servidor.getRam());
+            intent.putExtra("almacenamiento", servidor.getAlmacenamiento());
+            intent.putExtra("direccionIp", servidor.getDireccionIp());
+            intent.putExtra("area", servidor.getArea());
+            context.startActivity(intent);
+        });
     }
 
     @Override
