@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -21,6 +22,7 @@ import java.util.List;
 public class HistorialComprasActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewCompras;
+    private FloatingActionButton fabExportarCompras;
     private CompraAdapter compraAdapter;
     private List<Compra> compraList;
 
@@ -34,6 +36,11 @@ public class HistorialComprasActivity extends AppCompatActivity {
 
         recyclerViewCompras = findViewById(R.id.recyclerViewCompras);
         recyclerViewCompras.setLayoutManager(new LinearLayoutManager(this));
+
+        fabExportarCompras = findViewById(R.id.fabExportarCompras);
+        fabExportarCompras.setOnClickListener(v -> {
+            ExportadorCSV.exportarRequisiciones(HistorialComprasActivity.this);
+        });
 
         compraList = new ArrayList<>();
         compraAdapter = new CompraAdapter(compraList);
