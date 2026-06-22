@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class InventarioServidoresActivity extends AppCompatActivity {
 
     private RecyclerView rvServidores;
+    private FloatingActionButton fabExportarServidores;
     private ServidorAdapter adapter;
     private List<Servidor> listaServidores;
     private FirebaseFirestore db;
@@ -29,6 +31,11 @@ public class InventarioServidoresActivity extends AppCompatActivity {
 
         rvServidores = findViewById(R.id.rvServidores);
         rvServidores.setLayoutManager(new LinearLayoutManager(this));
+
+        fabExportarServidores = findViewById(R.id.fabExportarServidores);
+        fabExportarServidores.setOnClickListener(v -> {
+            ExportadorCSV.exportarServidores(InventarioServidoresActivity.this);
+        });
 
         listaServidores = new ArrayList<>();
         adapter = new ServidorAdapter(listaServidores);
