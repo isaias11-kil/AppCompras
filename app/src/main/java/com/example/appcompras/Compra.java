@@ -2,41 +2,45 @@ package com.example.appcompras;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.Exclude;
+import java.util.List;
 
 public class Compra {
     private String idDocumento;
-    private String descripcion;
-    private String cantidad;
     private Timestamp fecha;
-    private String imageUrl;
+    private String responsable;
+    private String actividad;
+    private double montoEntregado;
+    private double totalGastado;
+    private double diferencia;
+    private int cantidadFacturas;
+    private String observaciones;
     private String userId;
+    private List<String> fotosFacturas;
 
     public Compra() {
         // Constructor vacío requerido por Firestore
     }
 
-    public Compra(String descripcion, String cantidad, Timestamp fecha, String imageUrl, String userId) {
-        this.descripcion = descripcion;
-        this.cantidad = cantidad;
+    public Compra(Timestamp fecha, String responsable, String actividad, double montoEntregado, double totalGastado, double diferencia, int cantidadFacturas, String observaciones, String userId, List<String> fotosFacturas) {
         this.fecha = fecha;
-        this.imageUrl = imageUrl;
+        this.responsable = responsable;
+        this.actividad = actividad;
+        this.montoEntregado = montoEntregado;
+        this.totalGastado = totalGastado;
+        this.diferencia = diferencia;
+        this.cantidadFacturas = cantidadFacturas;
+        this.observaciones = observaciones;
         this.userId = userId;
+        this.fotosFacturas = fotosFacturas;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    @Exclude
+    public String getIdDocumento() {
+        return idDocumento;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public String getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(String cantidad) {
-        this.cantidad = cantidad;
+    public void setIdDocumento(String idDocumento) {
+        this.idDocumento = idDocumento;
     }
 
     public Timestamp getFecha() {
@@ -47,12 +51,60 @@ public class Compra {
         this.fecha = fecha;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getResponsable() {
+        return responsable;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setResponsable(String responsable) {
+        this.responsable = responsable;
+    }
+
+    public String getActividad() {
+        return actividad;
+    }
+
+    public void setActividad(String actividad) {
+        this.actividad = actividad;
+    }
+
+    public double getMontoEntregado() {
+        return montoEntregado;
+    }
+
+    public void setMontoEntregado(double montoEntregado) {
+        this.montoEntregado = montoEntregado;
+    }
+
+    public double getTotalGastado() {
+        return totalGastado;
+    }
+
+    public void setTotalGastado(double totalGastado) {
+        this.totalGastado = totalGastado;
+    }
+
+    public double getDiferencia() {
+        return diferencia;
+    }
+
+    public void setDiferencia(double diferencia) {
+        this.diferencia = diferencia;
+    }
+
+    public int getCantidadFacturas() {
+        return cantidadFacturas;
+    }
+
+    public void setCantidadFacturas(int cantidadFacturas) {
+        this.cantidadFacturas = cantidadFacturas;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
 
     public String getUserId() {
@@ -63,12 +115,11 @@ public class Compra {
         this.userId = userId;
     }
 
-    @Exclude
-    public String getIdDocumento() {
-        return idDocumento;
+    public List<String> getFotosFacturas() {
+        return fotosFacturas;
     }
 
-    public void setIdDocumento(String idDocumento) {
-        this.idDocumento = idDocumento;
+    public void setFotosFacturas(List<String> fotosFacturas) {
+        this.fotosFacturas = fotosFacturas;
     }
 }
