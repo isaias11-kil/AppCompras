@@ -68,6 +68,22 @@
         android:textSize="16sp"
         android:layout_marginBottom="16dp" />
 
+    <Button
+        android:id="@+id/btnRegistrarServidor"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Registrar Servidor"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/btnVerInventarioServidores"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Ver Inventario de Servidores"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp" />
+
     <!-- Espaciador para empujar el botón de logout hacia abajo -->
     <View
         android:layout_width="match_parent"

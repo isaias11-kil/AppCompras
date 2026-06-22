@@ -22,6 +22,12 @@
             android:name=".RegistroActivity"
             android:exported="false" />
         <activity
+            android:name=".RegistrarServidorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".InventarioServidoresActivity"
+            android:exported="false" />
+        <activity
             android:name=".HomeActivity"
             android:exported="false" />
         <activity

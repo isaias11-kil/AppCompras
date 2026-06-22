@@ -19,6 +19,8 @@ public class HomeActivity extends AppCompatActivity {
     private TextView tvTotalGastado;
     private Button btnRegistrarCompra;
     private Button btnHistorialCompras;
+    private Button btnRegistrarServidor;
+    private Button btnVerInventarioServidores;
     private Button btnLogout;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
@@ -33,6 +35,8 @@ public class HomeActivity extends AppCompatActivity {
         tvTotalGastado = findViewById(R.id.tvTotalGastado);
         btnRegistrarCompra = findViewById(R.id.btnRegistrarCompra);
         btnHistorialCompras = findViewById(R.id.btnHistorialCompras);
+        btnRegistrarServidor = findViewById(R.id.btnRegistrarServidor);
+        btnVerInventarioServidores = findViewById(R.id.btnVerInventarioServidores);
         btnLogout = findViewById(R.id.btnLogout);
 
         // Inicializar Firebase
@@ -48,6 +52,18 @@ public class HomeActivity extends AppCompatActivity {
         // Configurar botón para historial de compras
         btnHistorialCompras.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, HistorialComprasActivity.class);
+            startActivity(intent);
+        });
+
+        // Configurar botón para registrar servidor
+        btnRegistrarServidor.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, RegistrarServidorActivity.class);
+            startActivity(intent);
+        });
+
+        // Configurar botón para inventario de servidores
+        btnVerInventarioServidores.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, InventarioServidoresActivity.class);
             startActivity(intent);
         });
 
