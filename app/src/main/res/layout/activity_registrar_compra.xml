@@ -14,18 +14,17 @@
         android:layout_marginBottom="16dp" />
 
     <EditText
-        android:id="@+id/etTotal"
+        android:id="@+id/etCantidad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Total de la compra"
-        android:inputType="numberDecimal"
+        android:hint="Cantidad (ej. 10 o 5 Cajas)"
         android:layout_marginBottom="16dp" />
 
     <EditText
         android:id="@+id/etDescripcion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Descripción"
+        android:hint="Descripción del equipo (ej. Switch Cisco 24 puertos)"
         android:layout_marginBottom="16dp" />
 
     <Button

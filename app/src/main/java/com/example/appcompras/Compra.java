@@ -6,7 +6,7 @@ import com.google.firebase.firestore.Exclude;
 public class Compra {
     private String idDocumento;
     private String descripcion;
-    private Double total;
+    private String cantidad;
     private Timestamp fecha;
     private String imageUrl;
     private String userId;
@@ -15,9 +15,9 @@ public class Compra {
         // Constructor vacío requerido por Firestore
     }
 
-    public Compra(String descripcion, Double total, Timestamp fecha, String imageUrl, String userId) {
+    public Compra(String descripcion, String cantidad, Timestamp fecha, String imageUrl, String userId) {
         this.descripcion = descripcion;
-        this.total = total;
+        this.cantidad = cantidad;
         this.fecha = fecha;
         this.imageUrl = imageUrl;
         this.userId = userId;
@@ -31,12 +31,12 @@ public class Compra {
         this.descripcion = descripcion;
     }
 
-    public Double getTotal() {
-        return total;
+    public String getCantidad() {
+        return cantidad;
     }
 
-    public void setTotal(Double total) {
-        this.total = total;
+    public void setCantidad(String cantidad) {
+        this.cantidad = cantidad;
     }
 
     public Timestamp getFecha() {

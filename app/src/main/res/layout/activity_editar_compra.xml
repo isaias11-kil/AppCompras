@@ -32,13 +32,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:hint="Total ($)">
+        android:hint="Cantidad">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextTotal"
+            android:id="@+id/editTextCantidad"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal" />
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

@@ -17,7 +17,7 @@ import java.util.Map;
 public class EditarCompraActivity extends AppCompatActivity {
 
     private TextInputEditText editTextDescripcion;
-    private TextInputEditText editTextTotal;
+    private TextInputEditText editTextCantidad;
     private Button buttonGuardarCambios;
 
     private String idDocumento;
@@ -29,7 +29,7 @@ public class EditarCompraActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editar_compra);
 
         editTextDescripcion = findViewById(R.id.editTextDescripcion);
-        editTextTotal = findViewById(R.id.editTextTotal);
+        editTextCantidad = findViewById(R.id.editTextCantidad);
         buttonGuardarCambios = findViewById(R.id.buttonGuardarCambios);
 
         db = FirebaseFirestore.getInstance();
@@ -38,13 +38,15 @@ public class EditarCompraActivity extends AppCompatActivity {
         if (getIntent() != null && getIntent().hasExtra("idDocumento")) {
             idDocumento = getIntent().getStringExtra("idDocumento");
             String descripcion = getIntent().getStringExtra("descripcion");
-            double total = getIntent().getDoubleExtra("total", 0.0);
+            String cantidad = getIntent().getStringExtra("cantidad");
 
             // Poblar los EditText
             if (descripcion != null) {
                 editTextDescripcion.setText(descripcion);
             }
-            editTextTotal.setText(String.valueOf(total));
+            if (cantidad != null) {
+                editTextCantidad.setText(cantidad);
+            }
         } else {
             Toast.makeText(this, "Error al cargar datos", Toast.LENGTH_SHORT).show();
             finish();
@@ -61,23 +63,15 @@ public class EditarCompraActivity extends AppCompatActivity {
 
     private void actualizarCompra() {
         String descripcionStr = editTextDescripcion.getText().toString().trim();
-        String totalStr = editTextTotal.getText().toString().trim();
+        String cantidadStr = editTextCantidad.getText().toString().trim();
 
         if (TextUtils.isEmpty(descripcionStr)) {
             editTextDescripcion.setError("La descripción es obligatoria");
             return;
         }
 
-        if (TextUtils.isEmpty(totalStr)) {
-            editTextTotal.setError("El total es obligatorio");
-            return;
-        }
-
-        double totalDouble;
-        try {
-            totalDouble = Double.parseDouble(totalStr);
-        } catch (NumberFormatException e) {
-            editTextTotal.setError("Formato de número inválido");
+        if (TextUtils.isEmpty(cantidadStr)) {
+            editTextCantidad.setError("La cantidad es obligatoria");
             return;
         }
 
@@ -86,7 +80,7 @@ public class EditarCompraActivity extends AppCompatActivity {
 
         Map<String, Object> updates = new HashMap<>();
         updates.put("descripcion", descripcionStr);
-        updates.put("total", totalDouble);
+        updates.put("cantidad", cantidadStr);
 
         db.collection("compras").document(idDocumento)
                 .update(updates)
