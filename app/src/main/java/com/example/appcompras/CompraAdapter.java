@@ -1,19 +1,22 @@
 package com.example.appcompras;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.content.Intent;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -21,9 +24,15 @@ import java.util.Locale;
 public class CompraAdapter extends RecyclerView.Adapter<CompraAdapter.CompraViewHolder> {
 
     private List<Compra> compraList;
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
 
     public CompraAdapter(List<Compra> compraList) {
         this.compraList = compraList;
+    }
+
+    public void setCompras(List<Compra> compras) {
+        this.compraList = compras;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -37,48 +46,42 @@ public class CompraAdapter extends RecyclerView.Adapter<CompraAdapter.CompraView
     public void onBindViewHolder(@NonNull CompraViewHolder holder, int position) {
         Compra compra = compraList.get(position);
 
-        holder.textViewDescripcion.setText(compra.getDescripcion());
+        holder.tvActividad.setText(compra.getActividad());
+        holder.tvResponsable.setText(compra.getResponsable());
+        holder.tvTotalGastado.setText("$" + compra.getTotalGastado());
 
-        if (compra.getCantidad() != null && !compra.getCantidad().isEmpty()) {
-            holder.textViewCantidad.setText("Cantidad: " + compra.getCantidad());
-        } else {
-            holder.textViewCantidad.setText("Cantidad: N/A");
-        }
-
-        // Formatear Timestamp a String
         Timestamp timestamp = compra.getFecha();
         if (timestamp != null) {
             Date date = timestamp.toDate();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
-            holder.textViewFecha.setText(sdf.format(date));
+            holder.tvFecha.setText(sdf.format(date));
         } else {
-            holder.textViewFecha.setText("");
+            holder.tvFecha.setText("");
         }
 
-        // Cargar imagen con Glide
-        if (compra.getImageUrl() != null && !compra.getImageUrl().isEmpty()) {
-            Glide.with(holder.itemView.getContext())
-                    .load(compra.getImageUrl())
-                    .centerCrop()
-                    .into(holder.imageViewFactura);
-        } else {
-            // Se puede establecer un placeholder aquí si se desea
-            holder.imageViewFactura.setImageDrawable(null);
-        }
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), EditarCompraActivity.class);
+            intent.putExtra("idDocumento", compra.getIdDocumento());
+            intent.putExtra("actividad", compra.getActividad());
+            intent.putExtra("responsable", compra.getResponsable());
+            intent.putExtra("montoEntregado", compra.getMontoEntregado());
+            intent.putExtra("observaciones", compra.getObservaciones());
+            v.getContext().startActivity(intent);
+        });
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), EditarCompraActivity.class);
-                intent.putExtra("idDocumento", compra.getIdDocumento());
-                intent.putExtra("descripcion", compra.getDescripcion());
-                if (compra.getCantidad() != null) {
-                    intent.putExtra("cantidad", compra.getCantidad());
-                } else {
-                    intent.putExtra("cantidad", "");
-                }
-                v.getContext().startActivity(intent);
-            }
+        holder.btnItemGenerarPdf.setOnClickListener(v -> {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("compras").document(compra.getIdDocumento()).collection("productos")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<Producto> productos = new ArrayList<>();
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        productos.add(doc.toObject(Producto.class));
+                    }
+                    PdfGenerator.generarPdfLiquidacion(v.getContext(), compra, productos);
+                })
+                .addOnFailureListener(e -> {
+                    PdfGenerator.generarPdfLiquidacion(v.getContext(), compra, new ArrayList<>());
+                });
         });
     }
 
@@ -88,17 +91,19 @@ public class CompraAdapter extends RecyclerView.Adapter<CompraAdapter.CompraView
     }
 
     public static class CompraViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageViewFactura;
-        TextView textViewDescripcion;
-        TextView textViewCantidad;
-        TextView textViewFecha;
+        TextView tvActividad;
+        TextView tvResponsable;
+        TextView tvFecha;
+        TextView tvTotalGastado;
+        Button btnItemGenerarPdf;
 
         public CompraViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageViewFactura = itemView.findViewById(R.id.imageViewFactura);
-            textViewDescripcion = itemView.findViewById(R.id.textViewDescripcion);
-            textViewCantidad = itemView.findViewById(R.id.textViewCantidad);
-            textViewFecha = itemView.findViewById(R.id.textViewFecha);
+            tvActividad = itemView.findViewById(R.id.tvActividad);
+            tvResponsable = itemView.findViewById(R.id.tvResponsable);
+            tvFecha = itemView.findViewById(R.id.tvFecha);
+            tvTotalGastado = itemView.findViewById(R.id.tvTotalGastado);
+            btnItemGenerarPdf = itemView.findViewById(R.id.btnItemGenerarPdf);
         }
     }
 }

@@ -1,0 +1,27 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Only authenticated users can access the database
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Ensure users can only read and write their own compras
+    match /compras/{compraId} {
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow read, update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+
+      // Subcollection for products
+      match /productos/{productoId} {
+        allow read, write: if request.auth != null && get(/databases/$(database)/documents/compras/$(compraId)).data.userId == request.auth.uid;
+      }
+    }
+
+    // Ensure users can only read and write their own insumos
+    match /insumos/{insumoId} {
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow read, update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+  }
+}

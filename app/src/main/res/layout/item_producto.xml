@@ -1,42 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:orientation="horizontal"
+    android:padding="8dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tvProdDesc"
+        android:layout_width="0dp"
+        android:layout_weight="2"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:text="Descripción" />
 
-        <TextView
-            android:id="@+id/tvNombreProducto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nombre del Producto"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/tvProdCant"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="Cant" />
 
-        <TextView
-            android:id="@+id/tvPrecioProducto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Precio: $0.00"
-            android:layout_marginTop="4dp"
-            android:textColor="#388E3C" />
+    <TextView
+        android:id="@+id/tvProdPrecio"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="$0.0" />
 
-        <TextView
-            android:id="@+id/tvStockProducto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Stock: 0"
-            android:layout_marginTop="4dp"
-            android:textColor="#757575" />
-
-    </LinearLayout>
-
-</androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/tvProdTotal"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="$0.0" />
+</LinearLayout>

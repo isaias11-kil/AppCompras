@@ -1,103 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center_horizontal">
+    android:padding="16dp"
+    tools:context=".HomeActivity">
 
     <TextView
         android:id="@+id/tvWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="¡Bienvenido!"
-        android:textSize="28sp"
+        android:text="Dashboard Principal"
+        android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="32dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardResumenInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
-        android:layout_marginBottom="40dp"
-        app:contentPadding="24dp">
+        android:layout_marginTop="16dp"
+        app:cardBackgroundColor="#F0F0F0"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
+        app:layout_constraintTop_toBottomOf="@id/tvWelcome">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center">
+            android:padding="16dp">
 
             <TextView
+                android:id="@+id/tvTotalComprasMes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total Gastado"
-                android:textSize="18sp"
-                android:textColor="#757575" />
+                android:text="Total Compras: 0"
+                android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tvTotalGastado"
+                android:id="@+id/tvTotalGastadoMes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Q0.00"
-                android:textSize="40sp"
+                android:text="Gastado: $0.00"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvTotalInsumos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Insumos: 0"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvUltimaCompra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Última Compra: N/A"
                 android:textStyle="bold"
-                android:textColor="#000000"
-                android:layout_marginTop="8dp" />
-
+                android:textSize="16sp" />
         </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-    </androidx.cardview.widget.CardView>
-
-    <Button
-        android:id="@+id/btnRegistrarCompra"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="Registrar Nueva Compra"
-        android:textSize="16sp"
-        android:layout_marginBottom="16dp" />
-
-    <Button
-        android:id="@+id/btnHistorialCompras"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="Ver Historial de Compras"
-        android:textSize="16sp"
-        android:layout_marginBottom="16dp" />
-
-    <Button
-        android:id="@+id/btnRegistrarServidor"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="Registrar Servidor"
-        android:textSize="16sp"
-        android:layout_marginBottom="16dp" />
-
-    <Button
-        android:id="@+id/btnVerInventarioServidores"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="Ver Inventario de Servidores"
-        android:textSize="16sp"
-        android:layout_marginBottom="16dp" />
-
-    <!-- Espaciador para empujar el botón de logout hacia abajo -->
-    <View
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@id/cardResumenInfo"
+        app:layout_constraintBottom_toTopOf="@id/btnCerrarSesion">
 
-    <Button
-        android:id="@+id/btnLogout"
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:alignmentMode="alignMargins"
+            android:columnOrderPreserved="false">
+
+            <!-- Compras -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardNuevaCompra"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="8dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:text="Nueva Compra"
+                    android:gravity="center"
+                    android:textStyle="bold" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardHistorialCompras"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="8dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:text="Historial Compras"
+                    android:gravity="center"
+                    android:textStyle="bold" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Insumos -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardNuevoInsumo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="8dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:text="Nuevo Insumo"
+                    android:gravity="center"
+                    android:textStyle="bold" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardHistorialInsumos"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="8dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:text="Historial Insumos"
+                    android:gravity="center"
+                    android:textStyle="bold" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardReportes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
+                android:layout_margin="8dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="8dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:text="Reportes"
+                    android:gravity="center"
+                    android:textStyle="bold" />
+            </com.google.android.material.card.MaterialCardView>
+
+        </GridLayout>
+    </ScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCerrarSesion"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:text="Cerrar Sesión"
-        android:textSize="16sp"
-        android:backgroundTint="#D32F2F"
-        android:textColor="#FFFFFF"
-        android:layout_marginBottom="8dp" />
+        android:textColor="@android:color/holo_red_dark"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

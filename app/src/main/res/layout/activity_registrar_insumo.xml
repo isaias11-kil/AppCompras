@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".EditarCompraActivity">
+    tools:context=".RegistrarInsumoActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Editar Compra"
+                android:text="Registrar Nuevo Insumo"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="24dp"
@@ -29,10 +29,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:hint="Actividad">
+                android:hint="Producto">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etActividad"
+                    android:id="@+id/etProducto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
@@ -42,56 +42,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:hint="Responsable">
+                android:hint="Cantidad">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etResponsable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Monto Entregado">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMontoEntregado"
+                    android:id="@+id/etCantidad"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Product section fields will be hidden programmatically -->
-            <EditText android:id="@+id/etDescProducto" android:layout_width="wrap_content" android:layout_height="wrap_content" />
-            <EditText android:id="@+id/etCantProducto" android:layout_width="wrap_content" android:layout_height="wrap_content" />
-            <EditText android:id="@+id/etPrecioProducto" android:layout_width="wrap_content" android:layout_height="wrap_content" />
-            <Button android:id="@+id/btnAgregarProducto" android:layout_width="wrap_content" android:layout_height="wrap_content" />
-
-            <TextView
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Productos Adquiridos"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="16dp"
+                android:hint="Unidad de Medida">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvProductosNuevos"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginBottom="16dp" />
-
-            <TextView
-                android:id="@+id/tvTotalCalculado"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Total Gastado: $0.00 | Diferencia: $0.00"
-                android:textStyle="bold"
-                android:gravity="end"
-                android:layout_marginBottom="16dp" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etUnidadMedida"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -108,10 +79,10 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnActualizarCompra"
+                android:id="@+id/btnGuardarInsumo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Actualizar Compra"
+                android:text="Guardar Insumo"
                 android:padding="12dp" />
 
         </LinearLayout>

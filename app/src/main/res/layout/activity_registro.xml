@@ -41,14 +41,14 @@
         android:minHeight="48dp"
         android:layout_marginBottom="24dp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCrearCuenta"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="Registrarme"
         android:layout_marginBottom="16dp"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnVolverLogin"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"

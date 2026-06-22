@@ -2,109 +2,139 @@ package com.example.appcompras;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private TextView tvTotalGastado;
-    private Button btnRegistrarCompra;
-    private Button btnHistorialCompras;
-    private Button btnRegistrarServidor;
-    private Button btnVerInventarioServidores;
-    private Button btnLogout;
-    private FirebaseFirestore db;
     private FirebaseAuth mAuth;
-    private static final String TAG = "HomeActivity";
+    private FirebaseFirestore db;
+    private MaterialButton btnCerrarSesion;
+    private TextView tvTotalComprasMes, tvTotalGastadoMes, tvTotalInsumos, tvUltimaCompra;
+
+    // Cards
+    private MaterialCardView cardNuevaCompra, cardHistorialCompras, cardNuevoInsumo, cardHistorialInsumos, cardReportes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // Inicializar vistas
-        tvTotalGastado = findViewById(R.id.tvTotalGastado);
-        btnRegistrarCompra = findViewById(R.id.btnRegistrarCompra);
-        btnHistorialCompras = findViewById(R.id.btnHistorialCompras);
-        btnRegistrarServidor = findViewById(R.id.btnRegistrarServidor);
-        btnVerInventarioServidores = findViewById(R.id.btnVerInventarioServidores);
-        btnLogout = findViewById(R.id.btnLogout);
-
-        // Inicializar Firebase
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // Configurar botón para registrar compra
-        btnRegistrarCompra.setOnClickListener(v -> {
-            Intent intent = new Intent(HomeActivity.this, RegistrarCompraActivity.class);
-            startActivity(intent);
+        btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
+        tvTotalComprasMes = findViewById(R.id.tvTotalComprasMes);
+        tvTotalGastadoMes = findViewById(R.id.tvTotalGastadoMes);
+        tvTotalInsumos = findViewById(R.id.tvTotalInsumos);
+        tvUltimaCompra = findViewById(R.id.tvUltimaCompra);
+
+        cardNuevaCompra = findViewById(R.id.cardNuevaCompra);
+        cardHistorialCompras = findViewById(R.id.cardHistorialCompras);
+        cardNuevoInsumo = findViewById(R.id.cardNuevoInsumo);
+        cardHistorialInsumos = findViewById(R.id.cardHistorialInsumos);
+        cardReportes = findViewById(R.id.cardReportes);
+
+        btnCerrarSesion.setOnClickListener(v -> cerrarSesion());
+
+        cardNuevaCompra.setOnClickListener(v -> {
+            startActivity(new Intent(HomeActivity.this, RegistrarCompraActivity.class));
         });
 
-        // Configurar botón para historial de compras
-        btnHistorialCompras.setOnClickListener(v -> {
-            Intent intent = new Intent(HomeActivity.this, HistorialComprasActivity.class);
-            startActivity(intent);
+        cardHistorialCompras.setOnClickListener(v -> {
+            startActivity(new Intent(HomeActivity.this, HistorialComprasActivity.class));
         });
 
-        // Configurar botón para registrar servidor
-        btnRegistrarServidor.setOnClickListener(v -> {
-            Intent intent = new Intent(HomeActivity.this, RegistrarServidorActivity.class);
-            startActivity(intent);
+        cardNuevoInsumo.setOnClickListener(v -> {
+            startActivity(new Intent(HomeActivity.this, RegistrarInsumoActivity.class));
         });
 
-        // Configurar botón para inventario de servidores
-        btnVerInventarioServidores.setOnClickListener(v -> {
-            Intent intent = new Intent(HomeActivity.this, InventarioServidoresActivity.class);
-            startActivity(intent);
+        cardHistorialInsumos.setOnClickListener(v -> {
+            startActivity(new Intent(HomeActivity.this, HistorialInsumosActivity.class));
         });
 
-        // Configurar botón de logout
-        btnLogout.setOnClickListener(v -> {
-            mAuth.signOut();
-            Intent intent = new Intent(HomeActivity.this, MainActivity.class);
-            // Evitar que el usuario vuelva atrás después de cerrar sesión
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
+        cardReportes.setOnClickListener(v -> {
+            ExportadorCSV.exportarCompras(this);
         });
+
+        cargarResumen();
+    }
+
+    private void cargarResumen() {
+        if (mAuth.getCurrentUser() == null) return;
+        String userId = mAuth.getCurrentUser().getUid();
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date startOfMonth = cal.getTime();
+
+        db.collection("compras")
+            .whereEqualTo("userId", userId)
+            .orderBy("fecha", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener(queryDocumentSnapshots -> {
+                int totalCompras = 0;
+                double totalGastado = 0;
+                boolean isFirst = true;
+
+                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    Compra c = document.toObject(Compra.class);
+
+                    if (isFirst) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                        String dateStr = c.getFecha() != null ? sdf.format(c.getFecha().toDate()) : "N/A";
+                        tvUltimaCompra.setText("Última Compra: " + dateStr + " - $" + c.getTotalGastado());
+                        isFirst = false;
+                    }
+
+                    if (c.getFecha() != null && !c.getFecha().toDate().before(startOfMonth)) {
+                        totalCompras++;
+                        totalGastado += c.getTotalGastado();
+                    }
+                }
+
+                if (totalCompras == 0 && isFirst) tvUltimaCompra.setText("Última Compra: N/A");
+
+                tvTotalComprasMes.setText("Total Compras del Mes: " + totalCompras);
+                tvTotalGastadoMes.setText(String.format("Gastado en el Mes: $%.2f", totalGastado));
+            });
+
+        db.collection("insumos")
+            .whereEqualTo("userId", userId)
+            .get()
+            .addOnSuccessListener(queryDocumentSnapshots -> {
+                tvTotalInsumos.setText("Total Insumos Registrados: " + queryDocumentSnapshots.size());
+            });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Llamar a calcularTotalGastado cada vez que la actividad vuelve al primer plano
-        calcularTotalGastado();
+        cargarResumen();
     }
 
-    private void calcularTotalGastado() {
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser == null) {
-            return;
-        }
-
-        String userId = currentUser.getUid();
-
-        db.collection("compras")
-                .whereEqualTo("userId", userId)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    // Contar el número de requisiciones en lugar del total gastado
-                    int totalRequisiciones = queryDocumentSnapshots.size();
-                    String totalFormateado = "Total Requisiciones: " + totalRequisiciones;
-                    tvTotalGastado.setText(totalFormateado);
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error al calcular las requisiciones", e);
-                    Toast.makeText(HomeActivity.this, "Error al cargar los datos", Toast.LENGTH_SHORT).show();
-                });
+    private void cerrarSesion() {
+        mAuth.signOut();
+        Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 }
