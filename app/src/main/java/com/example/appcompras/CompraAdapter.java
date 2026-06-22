@@ -39,10 +39,10 @@ public class CompraAdapter extends RecyclerView.Adapter<CompraAdapter.CompraView
 
         holder.textViewDescripcion.setText(compra.getDescripcion());
 
-        if (compra.getTotal() != null) {
-            holder.textViewTotal.setText(String.format(Locale.getDefault(), "Total: $%.2f", compra.getTotal()));
+        if (compra.getCantidad() != null && !compra.getCantidad().isEmpty()) {
+            holder.textViewCantidad.setText("Cantidad: " + compra.getCantidad());
         } else {
-            holder.textViewTotal.setText("Total: $0.00");
+            holder.textViewCantidad.setText("Cantidad: N/A");
         }
 
         // Formatear Timestamp a String
@@ -72,10 +72,10 @@ public class CompraAdapter extends RecyclerView.Adapter<CompraAdapter.CompraView
                 Intent intent = new Intent(v.getContext(), EditarCompraActivity.class);
                 intent.putExtra("idDocumento", compra.getIdDocumento());
                 intent.putExtra("descripcion", compra.getDescripcion());
-                if (compra.getTotal() != null) {
-                    intent.putExtra("total", compra.getTotal());
+                if (compra.getCantidad() != null) {
+                    intent.putExtra("cantidad", compra.getCantidad());
                 } else {
-                    intent.putExtra("total", 0.0);
+                    intent.putExtra("cantidad", "");
                 }
                 v.getContext().startActivity(intent);
             }
@@ -90,14 +90,14 @@ public class CompraAdapter extends RecyclerView.Adapter<CompraAdapter.CompraView
     public static class CompraViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewFactura;
         TextView textViewDescripcion;
-        TextView textViewTotal;
+        TextView textViewCantidad;
         TextView textViewFecha;
 
         public CompraViewHolder(@NonNull View itemView) {
             super(itemView);
             imageViewFactura = itemView.findViewById(R.id.imageViewFactura);
             textViewDescripcion = itemView.findViewById(R.id.textViewDescripcion);
-            textViewTotal = itemView.findViewById(R.id.textViewTotal);
+            textViewCantidad = itemView.findViewById(R.id.textViewCantidad);
             textViewFecha = itemView.findViewById(R.id.textViewFecha);
         }
     }

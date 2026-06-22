@@ -30,7 +30,7 @@ import java.util.UUID;
 
 public class RegistrarCompraActivity extends AppCompatActivity {
 
-    private EditText etTotal;
+    private EditText etCantidad;
     private EditText etDescripcion;
     private ImageView ivPreviewFoto;
     private Button btnSeleccionarFoto;
@@ -51,7 +51,7 @@ public class RegistrarCompraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrar_compra);
 
-        etTotal = findViewById(R.id.etTotal);
+        etCantidad = findViewById(R.id.etCantidad);
         etDescripcion = findViewById(R.id.etDescripcion);
         ivPreviewFoto = findViewById(R.id.ivPreviewFoto);
         btnSeleccionarFoto = findViewById(R.id.btnSeleccionarFoto);
@@ -76,11 +76,11 @@ public class RegistrarCompraActivity extends AppCompatActivity {
     }
 
     private void guardarCompra() {
-        String totalStr = etTotal.getText().toString().trim();
+        String cantidadStr = etCantidad.getText().toString().trim();
         String descripcion = etDescripcion.getText().toString().trim();
 
-        if (TextUtils.isEmpty(totalStr)) {
-            etTotal.setError("El total es requerido");
+        if (TextUtils.isEmpty(cantidadStr)) {
+            etCantidad.setError("La cantidad es requerida");
             return;
         }
 
@@ -91,14 +91,6 @@ public class RegistrarCompraActivity extends AppCompatActivity {
 
         if (imageUri == null) {
             Toast.makeText(this, "Por favor selecciona una foto de la factura", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        double total;
-        try {
-            total = Double.parseDouble(totalStr);
-        } catch (NumberFormatException e) {
-            etTotal.setError("El total debe ser un número válido");
             return;
         }
 
@@ -123,7 +115,7 @@ public class RegistrarCompraActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Uri uri) {
                                 String downloadUrl = uri.toString();
-                                guardarDatosFirestore(userId, total, descripcion, downloadUrl);
+                                guardarDatosFirestore(userId, cantidadStr, descripcion, downloadUrl);
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -143,10 +135,10 @@ public class RegistrarCompraActivity extends AppCompatActivity {
                 });
     }
 
-    private void guardarDatosFirestore(String userId, double total, String descripcion, String imageUrl) {
+    private void guardarDatosFirestore(String userId, String cantidad, String descripcion, String imageUrl) {
         Map<String, Object> compra = new HashMap<>();
         compra.put("userId", userId);
-        compra.put("total", total);
+        compra.put("cantidad", cantidad);
         compra.put("descripcion", descripcion);
         compra.put("imageUrl", imageUrl);
         compra.put("fecha", FieldValue.serverTimestamp());
@@ -169,13 +161,13 @@ public class RegistrarCompraActivity extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
             btnSeleccionarFoto.setEnabled(false);
             btnGuardarCompra.setEnabled(false);
-            etTotal.setEnabled(false);
+            etCantidad.setEnabled(false);
             etDescripcion.setEnabled(false);
         } else {
             progressBar.setVisibility(View.GONE);
             btnSeleccionarFoto.setEnabled(true);
             btnGuardarCompra.setEnabled(true);
-            etTotal.setEnabled(true);
+            etCantidad.setEnabled(true);
             etDescripcion.setEnabled(true);
         }
     }

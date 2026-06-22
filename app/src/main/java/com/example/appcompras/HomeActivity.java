@@ -81,25 +81,14 @@ public class HomeActivity extends AppCompatActivity {
                 .whereEqualTo("userId", userId)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    double totalGastado = 0.0;
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        try {
-                            Double totalCompra = document.getDouble("total");
-                            if (totalCompra != null) {
-                                totalGastado += totalCompra;
-                            }
-                        } catch (Exception e) {
-                            Log.e(TAG, "Error al obtener total de la compra", e);
-                        }
-                    }
-
-                    // Actualizar el TextView con el total formateado
-                    String totalFormateado = String.format("Q%.2f", totalGastado);
+                    // Contar el número de requisiciones en lugar del total gastado
+                    int totalRequisiciones = queryDocumentSnapshots.size();
+                    String totalFormateado = "Total Requisiciones: " + totalRequisiciones;
                     tvTotalGastado.setText(totalFormateado);
                 })
                 .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error al calcular el total gastado", e);
-                    Toast.makeText(HomeActivity.this, "Error al cargar el total gastado", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Error al calcular las requisiciones", e);
+                    Toast.makeText(HomeActivity.this, "Error al cargar los datos", Toast.LENGTH_SHORT).show();
                 });
     }
 }
