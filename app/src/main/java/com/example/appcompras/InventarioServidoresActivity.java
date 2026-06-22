@@ -7,6 +7,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -43,7 +45,45 @@ public class InventarioServidoresActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
+        configurarSwipeToDelete();
         cargarServidores();
+    }
+
+    private void configurarSwipeToDelete() {
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                Servidor servidorAEliminar = listaServidores.get(position);
+                String idDocumento = servidorAEliminar.getIdDocumento();
+
+                if (idDocumento != null && !idDocumento.isEmpty()) {
+                    db.collection("servidores").document(idDocumento)
+                            .delete()
+                            .addOnSuccessListener(aVoid -> {
+                                listaServidores.remove(position);
+                                adapter.notifyItemRemoved(position);
+                                Toast.makeText(InventarioServidoresActivity.this, "Servidor eliminado correctamente", Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e(TAG, "Error al eliminar el servidor", e);
+                                Toast.makeText(InventarioServidoresActivity.this, "Error al eliminar: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                adapter.notifyItemChanged(position); // Restaurar vista
+                            });
+                } else {
+                    Toast.makeText(InventarioServidoresActivity.this, "Error: ID de servidor no válido", Toast.LENGTH_SHORT).show();
+                    adapter.notifyItemChanged(position);
+                }
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(rvServidores);
     }
 
     private void cargarServidores() {
